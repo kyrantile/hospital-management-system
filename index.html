@@ -25,6 +25,7 @@
           <button class="nav-item" data-section="patients">Patients</button>
           <button class="nav-item" data-section="doctors">Doctors</button>
           <button class="nav-item" data-section="appointments">Appointments</button>
+          <button class="nav-item" data-section="records">Records</button>
           <button class="nav-item" data-section="departments">Departments</button>
           <button class="nav-item" data-section="billing">Billing</button>
         </nav>
@@ -36,7 +37,11 @@
             <p class="eyebrow">Overview</p>
             <h2>Hospital Management System</h2>
           </div>
-          <button id="resetDataBtn" class="ghost-btn">Reset Demo Data</button>
+
+          <div class="header-actions">
+            <input id="globalSearch" class="search-input" type="search" placeholder="Search patients, doctors, records..." />
+            <button id="resetDataBtn" class="ghost-btn">Reset Demo Data</button>
+          </div>
         </header>
 
         <section id="dashboard" class="page active">
@@ -135,6 +140,15 @@
               <tbody id="appointmentsTable"></tbody>
             </table>
           </div>
+        </section>
+
+        <section id="records" class="page">
+          <div class="section-header">
+            <h3>Medical Records</h3>
+            <button class="primary-btn" data-open="recordModal">Add Record</button>
+          </div>
+
+          <div class="card-grid" id="recordsGrid"></div>
         </section>
 
         <section id="departments" class="page">
@@ -279,6 +293,47 @@
           <div class="modal-actions">
             <button type="button" class="ghost-btn" data-close="appointmentModal">Cancel</button>
             <button type="submit" class="primary-btn">Save Appointment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="recordModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Add Medical Record</h3>
+          <button class="close-btn" data-close="recordModal">×</button>
+        </div>
+        <form id="recordForm">
+          <div class="field-grid">
+            <label>
+              Patient
+              <select name="patientId" id="recordPatientSelect"></select>
+            </label>
+            <label>
+              Doctor
+              <select name="doctorId" id="recordDoctorSelect"></select>
+            </label>
+            <label>
+              Date
+              <input type="date" name="date" required />
+            </label>
+            <label>
+              Visit Type
+              <input type="text" name="title" required />
+            </label>
+            <label class="full-width">
+              Clinical Notes
+              <textarea name="notes" rows="4" required></textarea>
+            </label>
+            <label class="full-width">
+              Prescription
+              <textarea name="prescription" rows="3" required></textarea>
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-btn" data-close="recordModal">Cancel</button>
+            <button type="submit" class="primary-btn">Save Record</button>
           </div>
         </form>
       </div>
