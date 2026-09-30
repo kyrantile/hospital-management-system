@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">+</div>
+          <div>
+            <h1>MedFlow</h1>
+            <p>Hospital Suite</p>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-item active" data-section="dashboard">Dashboard</button>
+          <button class="nav-item" data-section="patients">Patients</button>
+          <button class="nav-item" data-section="doctors">Doctors</button>
+          <button class="nav-item" data-section="appointments">Appointments</button>
+          <button class="nav-item" data-section="departments">Departments</button>
+          <button class="nav-item" data-section="billing">Billing</button>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Overview</p>
+            <h2>Hospital Management System</h2>
+          </div>
+          <button id="resetDataBtn" class="ghost-btn">Reset Demo Data</button>
+        </header>
+
+        <section id="dashboard" class="page active">
+          <div class="stats-grid">
+            <div class="stat-card accent-blue">
+              <span>Total Patients</span>
+              <strong id="totalPatients">0</strong>
+            </div>
+            <div class="stat-card accent-green">
+              <span>Total Doctors</span>
+              <strong id="totalDoctors">0</strong>
+            </div>
+            <div class="stat-card accent-orange">
+              <span>Appointments</span>
+              <strong id="totalAppointments">0</strong>
+            </div>
+            <div class="stat-card accent-purple">
+              <span>Departments</span>
+              <strong id="totalDepartments">0</strong>
+            </div>
+          </div>
+
+          <div class="panel-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Today’s Appointments</h3>
+              </div>
+              <ul id="todayAppointments" class="list"></ul>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Revenue Overview</h3>
+              </div>
+              <div class="revenue-box">
+                <p>Total Collected</p>
+                <h4 id="totalCollected">$0</h4>
+              </div>
+              <div class="revenue-box muted">
+                <p>Pending Bills</p>
+                <h4 id="pendingBills">$0</h4>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="patients" class="page">
+          <div class="section-header">
+            <h3>Patients</h3>
+            <button class="primary-btn" data-open="patientModal">Add Patient</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Gender</th>
+                  <th>Condition</th>
+                  <th>Doctor</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="patientsTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="doctors" class="page">
+          <div class="section-header">
+            <h3>Doctors</h3>
+            <button class="primary-btn" data-open="doctorModal">Add Doctor</button>
+          </div>
+
+          <div class="card-grid" id="doctorsGrid"></div>
+        </section>
+
+        <section id="appointments" class="page">
+          <div class="section-header">
+            <h3>Appointments</h3>
+            <button class="primary-btn" data-open="appointmentModal">Schedule Appointment</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Patient</th>
+                  <th>Doctor</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="appointmentsTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="departments" class="page">
+          <div class="section-header">
+            <h3>Departments</h3>
+            <button class="primary-btn" data-open="departmentModal">Add Department</button>
+          </div>
+
+          <div class="card-grid" id="departmentsGrid"></div>
+        </section>
+
+        <section id="billing" class="page">
+          <div class="section-header">
+            <h3>Billing</h3>
+            <button class="primary-btn" data-open="billingModal">Add Invoice</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Invoice</th>
+                  <th>Patient</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="billingTable"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal hidden" id="patientModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Add Patient</h3>
+          <button class="close-btn" data-close="patientModal">×</button>
+        </div>
+        <form id="patientForm">
+          <div class="field-grid">
+            <label>
+              Name
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              Age
+              <input type="number" name="age" min="0" required />
+            </label>
+            <label>
+              Gender
+              <select name="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </label>
+            <label>
+              Condition
+              <input type="text" name="condition" required />
+            </label>
+            <label>
+              Assigned Doctor
+              <select name="doctorId" id="patientDoctorSelect"></select>
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-btn" data-close="patientModal">Cancel</button>
+            <button type="submit" class="primary-btn">Save Patient</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="doctorModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Add Doctor</h3>
+          <button class="close-btn" data-close="doctorModal">×</button>
+        </div>
+        <form id="doctorForm">
+          <div class="field-grid">
+            <label>
+              Name
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              Specialty
+              <input type="text" name="specialty" required />
+            </label>
+            <label>
+              Department
+              <select name="departmentId" id="doctorDepartmentSelect"></select>
+            </label>
+            <label>
+              Shift
+              <input type="text" name="shift" required />
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-btn" data-close="doctorModal">Cancel</button>
+            <button type="submit" class="primary-btn">Save Doctor</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="appointmentModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Schedule Appointment</h3>
+          <button class="close-btn" data-close="appointmentModal">×</button>
+        </div>
+        <form id="appointmentForm">
+          <div class="field-grid">
+            <label>
+              Patient
+              <select name="patientId" id="appointmentPatientSelect"></select>
+            </label>
+            <label>
+              Doctor
+              <select name="doctorId" id="appointmentDoctorSelect"></select>
+            </label>
+            <label>
+              Date
+              <input type="date" name="date" required />
+            </label>
+            <label>
+              Time
+              <input type="time" name="time" required />
+            </label>
+            <label>
+              Status
+              <select name="status">
+                <option value="Scheduled">Scheduled</option>
+                <option value="Checked In">Checked In</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-btn" data-close="appointmentModal">Cancel</button>
+            <button type="submit" class="primary-btn">Save Appointment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="departmentModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Add Department</h3>
+          <button class="close-btn" data-close="departmentModal">×</button>
+        </div>
+        <form id="departmentForm">
+          <div class="field-grid">
+            <label>
+              Department Name
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              Floor
+              <input type="text" name="floor" required />
+            </label>
+            <label>
+              Head
+              <input type="text" name="head" required />
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-btn" data-close="departmentModal">Cancel</button>
+            <button type="submit" class="primary-btn">Save Department</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="billingModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Add Invoice</h3>
+          <button class="close-btn" data-close="billingModal">×</button>
+        </div>
+        <form id="billingForm">
+          <div class="field-grid">
+            <label>
+              Invoice ID
+              <input type="text" name="invoiceId" required />
+            </label>
+            <label>
+              Patient
+              <select name="patientId" id="billingPatientSelect"></select>
+            </label>
+            <label>
+              Amount
+              <input type="number" name="amount" min="0" step="0.01" required />
+            </label>
+            <label>
+              Status
+              <select name="status">
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+              </select>
+            </label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="ghost-btn" data-close="billingModal">Cancel</button>
+            <button type="submit" class="primary-btn">Save Invoice</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
