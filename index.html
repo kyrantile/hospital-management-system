@@ -10,7 +10,41 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="app-shell">
+    <div id="authScreen" class="auth-screen">
+      <div class="auth-card">
+        <div class="auth-brand">
+          <div class="brand-mark">+</div>
+          <div>
+            <h1>MedFlow</h1>
+            <p>Hospital Access Portal</p>
+          </div>
+        </div>
+
+        <h2>Sign in</h2>
+        <p class="auth-subtitle">Access the hospital management dashboard</p>
+
+        <form id="loginForm">
+          <label>
+            Email
+            <input type="email" id="emailInput" value="admin@medflow.com" required />
+          </label>
+          <label>
+            Password
+            <input type="password" id="passwordInput" value="admin123" required />
+          </label>
+          <p id="loginError" class="login-error"></p>
+          <button type="submit" class="primary-btn full-width">Login</button>
+        </form>
+
+        <div class="demo-credentials">
+          <strong>Demo credentials</strong>
+          <span>Email: admin@medflow.com</span>
+          <span>Password: admin123</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="appShell" class="app-shell hidden">
       <aside class="sidebar">
         <div class="brand">
           <div class="brand-mark">+</div>
@@ -41,6 +75,7 @@
           <div class="header-actions">
             <input id="globalSearch" class="search-input" type="search" placeholder="Search patients, doctors, records..." />
             <button id="resetDataBtn" class="ghost-btn">Reset Demo Data</button>
+            <button id="logoutBtn" class="secondary-btn">Logout</button>
           </div>
         </header>
 

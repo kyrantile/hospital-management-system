@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'hospital-management-system';
+const USER_SESSION_KEY = 'hospital-management-session';
 
 const defaultState = {
   patients: [
@@ -61,7 +62,18 @@ const defaultState = {
   ]
 };
 
+const credentials = {
+  email: 'admin@medflow.com',
+  password: 'admin123'
+};
+
 let state = loadState();
+
+const authScreen = document.getElementById('authScreen');
+const appShell = document.getElementById('appShell');
+const loginForm = document.getElementById('loginForm');
+const loginError = document.getElementById('loginError');
+const logoutBtn = document.getElementById('logoutBtn');
 
 const navButtons = document.querySelectorAll('.nav-item');
 const pageSections = document.querySelectorAll('.page');
@@ -103,11 +115,48 @@ const pendingBills = document.getElementById('pendingBills');
 init();
 
 function init() {
+  setupAuth();
   setupNavigation();
   setupModals();
   setupForms();
   setupSearch();
+  syncAuthView();
   renderAll();
+}
+
+function setupAuth() {
+  loginForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('emailInput').value.trim();
+    const password = document.getElementById('passwordInput').value.trim();
+
+    if (email === credentials.email && password === credentials.password) {
+      localStorage.setItem(USER_SESSION_KEY, JSON.stringify({ email, role: 'admin' }));
+      loginError.textContent = '';
+      syncAuthView();
+      return;
+    }
+
+    loginError.textContent = 'Invalid email or password.';
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem(USER_SESSION_KEY);
+    syncAuthView();
+  });
+}
+
+function syncAuthView() {
+  const session = JSON.parse(localStorage.getItem(USER_SESSION_KEY) || 'null');
+  const isLoggedIn = !!session;
+
+  authScreen.classList.toggle('hidden', isLoggedIn);
+  appShell.classList.toggle('hidden', !isLoggedIn);
+
+  if (isLoggedIn) {
+    renderAll();
+  }
 }
 
 function setupNavigation() {
@@ -270,6 +319,8 @@ function setupForms() {
 }
 
 function renderAll() {
+  if (!localStorage.getItem(USER_SESSION_KEY)) return;
+
   populateSelects();
   renderDashboard();
   renderPatients();
